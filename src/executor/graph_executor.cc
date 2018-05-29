@@ -79,7 +79,9 @@ inline void EmplaceBackZeros(const NDArrayStorageType stype, const TShape &shape
     vec->emplace_back(stype, shape, ctx, true, dtype);
   }
 }
-void GraphExecutor::Forward(bool is_train) {
+void GraphExecutor::Forward(bool is_train) 
+{
+  
   RunOps(is_train, 0, num_forward_nodes_);
 }
 
@@ -248,7 +250,10 @@ inline ValueType get_node_attr(
  * This is triggered by both simple_bind and bind flows.
  */
 nnvm::Graph GraphExecutor::InitFullGraph(nnvm::Symbol symbol,
+ 
+  
                                          const std::vector<OpReqType>& grad_req_types) {
+ LOG(INFO) << "\t进入初始化全部图片\t"; 
   using nnvm::NodePtr;
   using nnvm::NodeEntry;
   // initial information
@@ -320,6 +325,8 @@ static Graph AssignContext(Graph g,
                     const std::vector<OpReqType>& grad_req_types,
                     size_t num_forward_inputs,
                     size_t num_forward_outputs) {
+
+  LOG(INFO) << "\jenter  分配上下文\t";
   const auto& idx = g.indexed_graph();
   const auto& mutable_nodes = idx.mutable_input_nodes();
   // default use default context.
@@ -411,6 +418,7 @@ static Graph AssignContext(Graph g,
   for (size_t i = 0; i < assigned_device.size(); ++i) {
     if (assigned_device[i] == -1) {
       vcontext.push_back(default_ctx);
+
     } else {
       vcontext.push_back(ctx_list[assigned_device[i]]);
     }
